@@ -4,9 +4,9 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 router.post('/signup', async (req, res) => {
-    let { username, email, contactNo, location, password } = req.body;
+    let { username, email, password  } = req.body;
 
-    if (!username || !email || !contactNo || !location || !password) {
+    if (!username || !email || !password) {
         return res.status(422).json({ error: 'please fill the fields properly' })
     }
     try {
@@ -20,7 +20,7 @@ router.post('/signup', async (req, res) => {
         let hashPassword = await bcrypt.hash(password, 12);
         password = hashPassword;
 
-        const newUser = new User({ username, email, contactNo, location, password });
+        const newUser = new User({ username, email, password });
         await newUser.save();
 
         return res.status(200).send({ message: "user registered successfully" + User.email + " and password " + User.password });
