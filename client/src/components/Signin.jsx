@@ -26,7 +26,7 @@ const Signin = () => {
                                 <div className='text-5xl mt-10 font-bold font-serif'>
                                     Log In
                                 </div>
-                                <form className='flex flex-col gap-3 mt-12 '>
+                                   <form className='flex flex-col gap-3 mt-12 '>
                                     <div className='flex flex-col'>
                                         <label className='text-sm'>Email address</label>
                                         <input type='email' onChange={(e) => {

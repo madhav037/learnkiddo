@@ -8,7 +8,7 @@ const Header = () => {
               <div className='p-1'>
                   <img src={pic} className='h-14' />
               </div>
-              <div className=' text-white flex flex-col gap-0'>
+              <div className='text-white flex flex-col gap-0'>
                   <div className='text-2xl font-bold'>
                       Learn Kiddo
                   </div>
