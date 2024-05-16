@@ -62,7 +62,8 @@ const Signin = () => {
 
                                                 if(res.status === 200) 
                                                     {
-                                                        navigate('/');
+                                                        localStorage.setItem('email', userData.email)
+                                                        navigate('/home');
                                                     }
                                                     else
                                                     {

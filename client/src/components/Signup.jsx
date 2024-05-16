@@ -69,7 +69,7 @@ const Signup = () => {
                                                 const result = await res.json();
 
                                                 if (res.status === 200) {
-                                                    navigate('/');
+                                                    navigate('/signin');
                                                 }
                                                 else {
                                                     window.alert('Inccorect Data');

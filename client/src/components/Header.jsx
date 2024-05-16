@@ -1,7 +1,11 @@
 import React from 'react'
 import pic from '../images/mainLogo.png'
+import { useNavigate } from 'react-router-dom'
 
 const Header = () => {
+
+    const nav = useNavigate();
+
   return (
       <div className='w-full p-1' style={{ backgroundColor: "#0B1D51" }}>
           <div className='h-full w-1/5  flex flex-row float-start items-center'>
@@ -18,7 +22,10 @@ const Header = () => {
               </div>
           </div>
           <div className='float-end mr-10 mt-4'>
-              <button className='bg-orange-400 w-24 h-8 rounded-xl font-bold'>Log In</button>
+                <button onClick={() => {
+                    localStorage.removeItem('email');
+                    nav('/');
+                }} className='bg-orange-400 w-24 h-8 rounded-xl font-bold'>Log Out</button>
           </div>
       </div>
   )
