@@ -5,8 +5,11 @@ import bentobook from '../images/bentobooks.png'
 import bentoarrow from '../images/bentoarrow.png'
 import bentopaper from '../images/bentopaper.png'
 import bentoperson from '../images/bentoperson.png'
+import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
+
+  const name = localStorage.getItem('email');
   const backgroundStyle = {
     background: `url(${bento}) no-repeat center center / cover fixed`
   };
@@ -41,7 +44,7 @@ const Dashboard = () => {
                   <div className='text-white text-xl font-medium pl-5 pr-28'>
                     Provided each languages full coures playlist and one shot video..
                   </div>
-                  <button className='bg-orange-500 w-20 rounded-xl mr-16 mt-2 ml-5 text-xl font-medium'>Watch</button>
+                  <Link to='/videoHome'><button className='bg-orange-500 w-20 rounded-xl mr-16 mt-2 ml-5 text-xl font-medium'>Watch</button></Link>
                 </div>
                 <div className='w-1/4 h-full flex justify-center items-center pb-3'>
                   <img src={bentoarrow} />
@@ -54,7 +57,7 @@ const Dashboard = () => {
                   Welcome Back !!!
                 </div>
                 <div className='flex justify-center text-xl font-bold text-red-500 italic'>
-                  Hetvi Deshani / Shruti Vadgama
+                  {name}
                 </div>
                 <button className='w-24 rounded-2xl mt-2 text-xl text-blue-950 font-bold italic' style={{ backgroundColor: '#b7c0ee' }}>About</button>
               </div>
