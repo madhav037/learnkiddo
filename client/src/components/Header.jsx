@@ -1,9 +1,10 @@
 import React from 'react'
 import pic from '../images/mainLogo.png'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Header = () => {
 
+    const user = localStorage.getItem('email');
     const nav = useNavigate();
 
   return (
@@ -22,10 +23,14 @@ const Header = () => {
               </div>
           </div>
           <div className='float-end mr-10 mt-4'>
-                <button onClick={() => {
-                    localStorage.removeItem('email');
-                    nav('/');
-                }} className='bg-orange-400 w-24 h-8 rounded-xl font-bold'>Log Out</button>
+                {
+                    user ? 
+                    <button onClick={() => {
+                        localStorage.removeItem('email');
+                        nav('/');
+                    }} className='bg-orange-400 w-24 h-8 rounded-xl font-bold'>Log Out</button> : 
+                    <Link to="/signin"><button className='bg-orange-400 w-24 h-8 rounded-xl font-bold'>Log In</button></Link>
+                }
           </div>
       </div>
   )

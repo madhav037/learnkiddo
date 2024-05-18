@@ -20,6 +20,9 @@ app.use('/user', user);
 const video = require('./routes/videoRouter.js');
 app.use('/video', video);
 
+const notes = require('./routes/notesRouter.js');
+app.use('/notes', notes);
+
 app.get('/', async (req, res) => {
     console.log('Helloooooo');
 })

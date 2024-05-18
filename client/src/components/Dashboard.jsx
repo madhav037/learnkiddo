@@ -34,7 +34,7 @@ const Dashboard = () => {
                   <div className='w-3/5 text-white text-xl pr-2 font-medium'>
                     Get exclusive e-notes of all languages..
                   </div>
-                  <button className='bg-orange-500 w-20 rounded-xl mr-16 mt-2 text-xl font-medium'>Get</button>
+                  <Link to="/enotesHome"><button className='bg-orange-500 w-20 rounded-xl mr-16 mt-2 text-xl font-medium'>Get</button></Link>
                 </div>
               </div>
             </div>
