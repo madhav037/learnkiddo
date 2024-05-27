@@ -23,6 +23,9 @@ app.use('/video', video);
 const notes = require('./routes/notesRouter.js');
 app.use('/notes', notes);
 
+const mcq = require('./routes/mcqRouter.js')
+app.use('/mcq', mcq);
+
 app.get('/', async (req, res) => {
     console.log('Helloooooo');
 })

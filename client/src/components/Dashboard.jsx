@@ -68,7 +68,7 @@ const Dashboard = () => {
                   <div className='w-4/5 h-1/2 text-white text-xl font-medium'>
                     Solve 100+ Multiple Choice Question
                   </div>
-                  <button className='bg-orange-500 w-20 rounded-xl mt-5 text-xl font-medium'>Solve</button>
+                  <Link to='/mcqhome'><button className='bg-orange-500 w-20 rounded-xl mt-5 text-xl font-medium'>Solve</button></Link>
                 </div>
                 <div className='w-full h-1/2'>
                   <img src={bentopaper} className='h-full w-full' />
