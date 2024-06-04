@@ -3,6 +3,8 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
+const compiler = require('compilex');
+const options = { stats : true};
 
 dotenv.config({path : './.env'});
 const app = express();
@@ -11,8 +13,10 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
+app.use("/codemirror-5.65.9", express.static("D:/Individual Folder/Shruti/Projects/learnkiddo/server/codemirror-5.65.16"))
 
 require('./connection/db.js');
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 const user = require('./routes/userRouter.js');
 app.use('/user', user);
@@ -25,6 +29,9 @@ app.use('/notes', notes);
 
 const mcq = require('./routes/mcqRouter.js')
 app.use('/mcq', mcq);
+
+const editor = require("./routes/editorRouter.js")
+app.use('/editor', editor);
 
 app.get('/', async (req, res) => {
     console.log('Helloooooo');
