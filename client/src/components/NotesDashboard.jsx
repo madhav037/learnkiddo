@@ -15,11 +15,11 @@ export const NotesDashboard = () => {
 
     const data = notesData.map(items => {
         return <>
-        <div className='bg-white text-black flex flex-col justify-center items-center rounded-xl p-3'>
-                <div>
-                    <img src={`${items.logo}`} alt="" className='h-40 w-40'/>
+            <div className=' text-black flex flex-col justify-center items-center rounded-xl p-3' style={{ backgroundColor: "#435688" }}>
+                <div className='rounded-md p-3' style={{ backgroundColor: "#8899C5" }}>
+                    <img src={`${items.logo}`} alt="" className='h-48 w-48'/>
                 </div>
-                <div className='text-xs font-bold mt-3 mb-2'>
+                <div className='text-xs font-bold mt-3 mb-2 text-white'>
                     {items.title}
                 </div>
                 <div>
