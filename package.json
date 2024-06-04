@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@uiw/react-codemirror": "^4.22.1",
+    "codemirror": "^5.65.16",
+    "compilex": "^0.7.4",
     "react-icons": "^5.2.1"
   }
 }

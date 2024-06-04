@@ -84,7 +84,7 @@ const Dashboard = () => {
                   <div className='text-white text-xl font-medium'>
                     Get rewarded with tokens for solving daily coding challenges in Java or C.
                   </div>
-                  <button className='bg-orange-500 w-20 rounded-xl mt-3 text-xl font-medium'>Earn</button>
+                  <Link to="/problemhome"><button className='bg-orange-500 w-20 rounded-xl mt-3 text-xl font-medium'>Earn</button></Link>
                 </div>
               </div>
             </div>

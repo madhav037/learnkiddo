@@ -12,6 +12,8 @@ import { NotesDashboard } from './components/NotesDashboard';
 import { InnerNotes } from './components/InnerNotes';
 import { McqDashboard } from './components/McqDashboard';
 import { InnerMcq } from './components/InnerMcq';
+import { ProblemDashboard } from './components/ProblemDashboard';
+import { InnerProblem } from './components/InnerProblem';
 // >>>>>>> b8bb2dc7a467b6ca0a24f23df9907ff993ed1ed0
 
 function App() {
@@ -30,7 +32,8 @@ function App() {
           <Route path='/enotesHome/:id' element={<InnerNotes />}></Route>
           <Route path='/mcqhome' element={<McqDashboard />}></Route>
           <Route path='/mcqhome/:id' element={<InnerMcq />}></Route>
-
+          <Route path='/problemhome' element={<ProblemDashboard />}></Route>
+          <Route path='/problemhomeone' element={<InnerProblem />}></Route>
         </Routes>
       </BrowserRouter>
     </>
