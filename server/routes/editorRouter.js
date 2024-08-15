@@ -16,6 +16,7 @@ router.post("/compile", function (req, res) {
             if (!input) {
                 var envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
                 compiler.compileCPP(envData, code, function (data) {
+                    console.log(data);
                     if (data.output) {
                         res.send(data);
                     }
@@ -40,6 +41,7 @@ router.post("/compile", function (req, res) {
             if (!input) {
                 var envData = { OS: "windows" };
                 compiler.compileJava(envData, code, function (data) {
+                    console.log(data);
                     if (data.output) {
                         res.send(data);
                     }
