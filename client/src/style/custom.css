@@ -1,0 +1,11 @@
+/* Custom CSS for react-select */
+.css-2b097c-container {
+    width: 120px;
+    color: black;
+    background-color: #474747;
+}
+
+.css-yk16xz-control {
+    background-color: #474747 !important;
+    border-color: #afec3f !important;
+}
