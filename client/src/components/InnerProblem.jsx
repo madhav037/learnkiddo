@@ -4,9 +4,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import Navbar from './Navbar'
 import Editor from "@monaco-editor/react";
 import Axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 
 export const InnerProblem = () =>{
+    const [problem,setProblem] = useState({});
+    const param = useParams();
+    const [email,setEmail] = useState("")
+    
     // State variable to set users source code
     const [userCode, setUserCode] = useState("");
 
@@ -19,9 +24,6 @@ export const InnerProblem = () =>{
     // State variable to set editors default font size
     const [fontSize, setFontSize] = useState(20);
 
-    // State variable to set users input
-    const [userInput, setUserInput] = useState("");
-
     // State variable to set users output
     const [userOutput, setUserOutput] = useState("");
 
@@ -33,26 +35,68 @@ export const InnerProblem = () =>{
         fontSize: fontSize
     }
 
+    useEffect(()=>{
+        setEmail(localStorage.getItem('email'))
+        getProblem();
+    },[])
+
+    const getProblem = async()=>{
+        try{
+            console.log(param.id);
+            const response = await fetch(`http://localhost:8000/problem/getoneproblem/${param.id}`, { method: 'GET' });
+            const res = await response.json();
+            setProblem(res);
+        } catch(error){
+            console.error(error);
+        } finally{
+            setLoading(false);
+        }
+    }
+
     // Function to call the compile endpoint
-    const  compile=()=> {
+    const  compile=async(submit)=> {
         setLoading(true);
         if (userCode === ``) {
             return
         }
+        
         console.log(userCode);
         console.log(userLang);
-        console.log(userInput);
-        // Post request to compile endpoint
-        Axios.post(`http://localhost:8000/editor/compile`, {
-            code: userCode,
-            language: userLang,
-            input: userInput
-        }).then((res) => {
-            setUserOutput(res.data.output);
-        }).then(() => {
-            console.log("It's done");
-            setLoading(false);
+        console.log(submit);
+        console.log(email);
+
+        const res = await fetch(`http://localhost:8000/editor/compile/${param.id}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({code: userCode,language: userLang,submit: submit,email: email})
         })
+
+        const data = await res.json();
+
+        if(data.error){
+            setUserOutput(data.error)
+        }
+        else{
+            setUserOutput(data.message)
+        }
+
+        console.log("It's done");
+        setLoading(false);
+        
+        // Post request to compile endpoint
+        // Axios.post(`http://localhost:8000/editor/compile`, {
+        //     code: userCode,
+        //     language: userLang,
+        //     submit: submit,
+        //     email:email
+        // }).then((res) => {
+        //     setUserOutput(res.message);
+        // }).then(() => {
+        //     console.log("It's done");
+        //     setLoading(false);
+        // })
     }
 
     // Function to clear the output screen
@@ -80,14 +124,23 @@ export const InnerProblem = () =>{
                             defaultValue="# Enter your code here"
                             onChange={(value) => { setUserCode(value) }}
                         />
-                        <button onClick={compile} className="run-btn absolute bottom-2.5 right-4 w-20 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
+                        <div className='flex flex-col'>
+                        <button onClick={()=>{
+                                compile(false)
+                        }} className="run-btn absolute bottom-2.5 right-13 w-20 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
                             Run
                         </button>
+                        <button onClick={()=>{
+                                compile(true)
+                        }} className="run-btn absolute bottom-2.5 right-4 w-24 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
+                            submit
+                        </button>
+                        </div>
                     </div>
                     <div className="right-container flex-[40%] h-[calc(100vh-50px)] flex flex-col bg-gray-900 border-l-3 border-blue-600 p-1.5">
-                        <h4 className="text-lime-300">Input:</h4>
+                        <h4 className="text-lime-300">Input: {problem.problem_title}</h4>
                         <div className="input-box flex-[50%]">
-                            <textarea id="code-inp" className="w-full h-full text-white resize-none bg-gray-900 text-whitesmoke p-1.5 focus:outline-none" onChange={(e) => setUserInput(e.target.value)}></textarea>
+                            <textarea id="code-inp" className="w-full h-full text-white resize-none bg-gray-900 text-whitesmoke p-1.5 focus:outline-none" ></textarea>
                         </div>
                         <h4 className="text-lime-300 text-white">Output:</h4>
                         {loading ? (

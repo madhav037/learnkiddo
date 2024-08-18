@@ -33,7 +33,7 @@ function App() {
           <Route path='/mcqhome' element={<McqDashboard />}></Route>
           <Route path='/mcqhome/:id' element={<InnerMcq />}></Route>
           <Route path='/problemhome' element={<ProblemDashboard />}></Route>
-          <Route path='/problemhomeone' element={<InnerProblem />}></Route>
+          <Route path='/problemhome/:id' element={<InnerProblem />}></Route>
         </Routes>
       </BrowserRouter>
     </>
