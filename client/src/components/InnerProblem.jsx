@@ -1,8 +1,6 @@
+import React, { useEffect, useRef, useState } from 'react'
 // import Header from './Header'
 // import CodeMirror from '../codemirror-5.65.16/lib/codemirror.js'
-import React, { useEffect, useRef, useState } from 'react'
-import Header from './Header'
-import CodeMirror from '../codemirror-5.65.16/lib/codemirror.js'
 
 export const InnerProblem = () =>{
     // State variable to set users source code
