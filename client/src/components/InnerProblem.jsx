@@ -1,8 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 // import Header from './Header'
 // import CodeMirror from '../codemirror-5.65.16/lib/codemirror.js'
+// import React, { useEffect, useRef, useState } from 'react'
+import Navbar from './Navbar'
+// import Editor from "@monaco-editor/react";
+import Editor from '@monaco-editor/react';
+import { useParams } from 'react-router-dom';
+// import Axios from 'axios';
+
 
 export const InnerProblem = () =>{
+    const [problem,setProblem] = useState({});
+    const param = useParams();
+    const [email,setEmail] = useState("")
+    
     // State variable to set users source code
     const [userCode, setUserCode] = useState("");
 
@@ -15,9 +26,6 @@ export const InnerProblem = () =>{
     // State variable to set editors default font size
     const [fontSize, setFontSize] = useState(20);
 
-    // State variable to set users input
-    const [userInput, setUserInput] = useState("");
-
     // State variable to set users output
     const [userOutput, setUserOutput] = useState("");
 
@@ -29,32 +37,88 @@ export const InnerProblem = () =>{
         fontSize: fontSize
     }
 
+    useEffect(()=>{
+        setEmail(localStorage.getItem('email'))
+        getProblem();
+    },[])
+
+    const getProblem = async()=>{
+        try{
+            console.log(param.id);
+            const response = await fetch(`http://localhost:8000/problem/getoneproblem/${param.id}`, { method: 'GET' });
+            const res = await response.json();
+            setProblem(res);
+        } catch(error){
+            console.error(error);
+        } finally{
+            setLoading(false);
+        }
+    }
+
     // Function to call the compile endpoint
-    const  compile=()=> {
+    const  compile=async(submit)=> {
         setLoading(true);
         if (userCode === ``) {
             return
         }
+        
         console.log(userCode);
         console.log(userLang);
-        console.log(userInput);
-        // Post request to compile endpoint
-        Axios.post(`http://localhost:8000/editor/compile`, {
-            code: userCode,
-            language: userLang,
-            input: userInput
-        }).then((res) => {
-            setUserOutput(res.data.output);
-        }).then(() => {
-            console.log("It's done");
-            setLoading(false);
+        console.log(submit);
+        console.log(email);
+
+        const res = await fetch(`http://localhost:8000/editor/compile/${param.id}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({code: userCode,language: userLang,submit: submit,email: email})
         })
+
+        const data = await res.json();
+
+        if(data.error){
+            setUserOutput(data.error)
+        }
+        else{
+            setUserOutput(data.message)
+        }
+
+        console.log("It's done");
+        setLoading(false);
+        
+        // Post request to compile endpoint
+        // Axios.post(`http://localhost:8000/editor/compile`, {
+        //     code: userCode,
+        //     language: userLang,
+        //     submit: submit,
+        //     email:email
+        // }).then((res) => {
+        //     setUserOutput(res.message);
+        // }).then(() => {
+        //     console.log("It's done");
+        //     setLoading(false);
+        // })
     }
 
     // Function to clear the output screen
     const clearOutput=()=> {
         setUserOutput("");
     }
+
+    const example = problem.examples.map((e,count) => {
+        if(count < 3)
+        {
+            return (
+                <>
+                    <div className='font-bold text-lg underline'>Example {count + 1 } :</div>
+                    <div className='ms-10 mt-3 font-semibold text-indigo-800'><span className='font-bold text-black text-lg'>input : </span>{e.input}</div>
+                    <div className='ms-10 mb-6 font-semibold text-indigo-800'><span className='font-bold text-black text-lg'>output : </span>{e.output}</div>
+                </>
+            )
+            count++;
+        }
+    })
 
     return(
         <>
@@ -64,43 +128,71 @@ export const InnerProblem = () =>{
                     userTheme={userTheme} setUserTheme={setUserTheme}
                     fontSize={fontSize} setFontSize={setFontSize}
                 />
-                <div className="main flex h-[calc(100vh-50px)]">
-                    <div className="left-container relative flex-[60%] h-[calc(100vh-50px)]">
-                        <Editor
-                            options={options}
-                            height="calc(100vh - 50px)"
-                            width="100%"
-                            theme={userTheme}
-                            language={userLang}
-                            defaultLanguage="python"
-                            defaultValue="# Enter your code here"
-                            onChange={(value) => { setUserCode(value) }}
-                        />
-                        <button onClick={compile} className="run-btn absolute bottom-2.5 right-4 w-20 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
-                            Run
-                        </button>
+                <div className="main flex h-fit" style={{backgroundColor: '#B7C0EE'}}>
+                <div className='flex flex-col border-2 border-blue-950 rounded-md m-2 w-1/2 gap-3 p-3' style={{backgroundColor: '#B7C0FF'}}>
+                    <div className='text-3xl text-blue-950 font-bold mt-7 text-start'>
+                        {problem.problem_id} . {problem.problem_title}
                     </div>
-                    <div className="right-container flex-[40%] h-[calc(100vh-50px)] flex flex-col bg-gray-900 border-l-3 border-blue-600 p-1.5">
-                        <h4 className="text-lime-300">Input:</h4>
-                        <div className="input-box flex-[50%]">
-                            <textarea id="code-inp" className="w-full h-full text-white resize-none bg-gray-900 text-whitesmoke p-1.5 focus:outline-none" onChange={(e) => setUserInput(e.target.value)}></textarea>
-                        </div>
-                        <h4 className="text-lime-300 text-white">Output:</h4>
-                        {loading ? (
-                            <h1 className='text-white'>
-                                Loading
-                            </h1>
-                            // <div className="spinner-box flex-[50%] bg-gray-900 flex justify-center items-center overflow-y-auto">
-                            //     <img src={spinner} alt="Loading..." className="w-52" />
-                            // </div>
-                        ) : (
-                            <div className="output-box flex-[50%] bg-gray-900 overflow-y-auto text-white relative">
-                                <pre className="text-base whitespace-pre-wrap">{userOutput}</pre>
-                                <button onClick={() => { clearOutput() }} className="clear-btn absolute bottom-3.5 right-4 w-20 h-10 text-2xl font-bold text-white bg-blue-600 border-none rounded transition duration-300 cursor-pointer">
-                                    Clear
-                                </button>
+                    <div className=' font-semibold text-justify mt-3'>
+                        <span className='text-lg font-bold underline'>problem_statement :</span> {problem.problem_statement}
+                    </div>
+                    <div className=' font-semibold text-justify'>
+                        <span className='text-lg font-bold underline'>input_statement :</span> {problem.input_statement}
+                    </div>
+                    <div className=' font-semibold text-justify'>
+                        <span className='text-lg font-bold underline'>output_statement :</span> {problem.output_statement}
+                    </div>
+                    <div className='mt-5 text-start'>
+                        {example}
+                    </div>
+                </div>
+                    <div className='flex flex-col w-1/2'>
+                    <div className="left-container relative flex-[60%] h-[calc(100vh-50px)]">
+                            <Editor
+                                options={options}
+                                height="calc(100vh - 50px)"
+                                width="100%"
+                                theme={userTheme}
+                                language={userLang}
+                                defaultLanguage="python"
+                                defaultValue="# Enter your code here"
+                                onChange={(value) => { setUserCode(value) }}
+                            />
+                            <div className='flex flex-col'>
+                            <button onClick={()=>{
+                                    compile(false)
+                            }} className="run-btn absolute bottom-2.5 right-13 w-20 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
+                                Run
+                            </button>
+                            <button onClick={()=>{
+                                    compile(true)
+                            }} className="run-btn absolute bottom-2.5 right-4 w-24 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
+                                submit
+                            </button>
                             </div>
-                         )} 
+                        </div>
+                        <div className="right-container flex-[40%] h-[calc(100vh-50px)] flex flex-col bg-gray-900 border-l-3 border-blue-600 p-1.5">
+                            <h4 className="text-lime-300">Input: {problem.problem_title}</h4>
+                            <div className="input-box flex-[50%]">
+                                <textarea id="code-inp" className="w-full h-full text-white resize-none bg-gray-900 text-whitesmoke p-1.5 focus:outline-none" ></textarea>
+                            </div>
+                            <h4 className="text-lime-300 text-white">Output:</h4>
+                            {loading ? (
+                                <h1 className='text-white'>
+                                    Loading
+                                </h1>
+                                // <div className="spinner-box flex-[50%] bg-gray-900 flex justify-center items-center overflow-y-auto">
+                                //     <img src={spinner} alt="Loading..." className="w-52" />
+                                // </div>
+                            ) : (
+                                <div className="output-box flex-[50%] bg-gray-900 overflow-y-auto text-white relative">
+                                    <pre className="text-base whitespace-pre-wrap">{userOutput}</pre>
+                                    <button onClick={() => { clearOutput() }} className="clear-btn absolute bottom-3.5 right-4 w-20 h-10 text-2xl font-bold text-white bg-blue-600 border-none rounded transition duration-300 cursor-pointer">
+                                        Clear
+                                    </button>
+                                </div>
+                            )} 
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,14 +4,14 @@ const bodyparser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const compiler = require('compilex');
-const options = { stats : true};
+const options = { stats: true };
 
-dotenv.config({path : './.env'});
+dotenv.config({ path: './.env' });
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(bodyparser.urlencoded({extended : false}));
+app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use("/codemirror-5.65.9", express.static("D:/Individual Folder/Shruti/Projects/learnkiddo/server/codemirror-5.65.16"))
 
@@ -32,6 +32,9 @@ app.use('/mcq', mcq);
 
 const editor = require("./routes/editorRouter.js")
 app.use('/editor', editor);
+
+const problem = require("./routes/problemRouter.js")
+app.use('/problem', problem);
 
 app.get('/', async (req, res) => {
     console.log('Helloooooo');
