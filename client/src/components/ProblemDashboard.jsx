@@ -24,12 +24,14 @@ export const ProblemDashboard = () => {
   const probelmStatement = problems.map((e) => {
     return (
       <>
-        <div className='w-screen p-1'>
-              <div className='text-xl font-semibold shadow-blue-950 shadow-md hover:bg-blue-950 hover:text-white py-2 ps-2  rounded-lg'>
-                <Link to={"/problemhome/" + e.problem_id}>
+        <div className='w-screen '>
+        <Link to={"/problemhome/" + e.problem_id}>
+              <div className='text-xl m-3 w-screen font-semibold shadow-blue-950 shadow-md hover:bg-blue-950 hover:text-white py-2 ps-2 rounded-lg'>
+                
                   {e.problem_title}
-                </Link>
+                
               </div>
+              </Link>
         </div>
       </>
     )
@@ -41,7 +43,7 @@ export const ProblemDashboard = () => {
       <div className="text-3xl font-bold text-center font-serif">
           Program List
       </div>
-      <div>
+      <div className='w-screen'>
         {probelmStatement}
       </div>
     </div>

@@ -183,7 +183,7 @@ const language_version = {
 //     }
 // })
 
-router.post('/compile', (req, res) => {
+router.post('/compile/:id', (req, res) => {
     //getting the required data from the request
     let code = req.body.code;
     let language = req.body.language;
@@ -191,7 +191,7 @@ router.post('/compile', (req, res) => {
 
     console.log(code);
     console.log(language);
-    console.log(input);
+    console.log("input" , input);
 
     if (language === "python") {
         language = "py"

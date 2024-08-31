@@ -86,19 +86,6 @@ export const InnerProblem = () =>{
 
         console.log("It's done");
         setLoading(false);
-        
-        // Post request to compile endpoint
-        // Axios.post(`http://localhost:8000/editor/compile`, {
-        //     code: userCode,
-        //     language: userLang,
-        //     submit: submit,
-        //     email:email
-        // }).then((res) => {
-        //     setUserOutput(res.message);
-        // }).then(() => {
-        //     console.log("It's done");
-        //     setLoading(false);
-        // })
     }
 
     // Function to clear the output screen
@@ -106,7 +93,7 @@ export const InnerProblem = () =>{
         setUserOutput("");
     }
 
-    const example = problem.examples.map((e,count) => {
+    const example = problem.examples ? problem.examples.map((e,count) => {
         if(count < 3)
         {
             return (
@@ -118,7 +105,9 @@ export const InnerProblem = () =>{
             )
             count++;
         }
-    })
+
+        return null;
+    }) : [];
 
     return(
         <>
