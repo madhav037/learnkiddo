@@ -252,8 +252,8 @@ router.post('/compile/:id', async (req, res) => {
         const response = await compileCode(language, code, example[i]);
 
         if (response) {
-            console.log(response.message);
-            console.log(example[i].output);
+            // console.log(response.message);
+            // console.log(example[i].output);
             if (response.status == 201) {
                 response.message = response.message.replace("\n", "");
                 if (response.message.toLowerCase() !== example[i].output.toLowerCase()) {
