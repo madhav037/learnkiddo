@@ -183,41 +183,180 @@ const language_version = {
 //     }
 // })
 
-router.post('/compile/:id', (req, res) => {
-    //getting the required data from the request
-    let code = req.body.code;
-    let language = req.body.language;
-    let input = req.body.input;
+// router.post('/compile', (req, res) => {
+//     //getting the required data from the request
+//     let code = req.body.code;
+//     let language = req.body.language;
+//     let input = req.body.input;
 
-    console.log(code);
-    console.log(language);
-    console.log("input" , input);
+//     console.log(code);
+//     console.log(language);
+//     console.log(input);
 
-    if (language === "python") {
-        language = "py"
+//     if (language === "python") {
+//         language = "py"
+//     }
+
+//     let data = ({
+//         "code": code,
+//         "language": language,
+//         "input": input
+//     });
+//     let config = {
+//         method: 'post',
+//         url: 'https://api.codex.jaagrav.in',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         data: data
+//     };
+
+//     //calling the code compilation API
+//     Axios(config)
+//         .then((response) => {
+//             res.send(response.data)
+//             console.log(response.data)
+//         }).catch((error) => {
+//             console.log(error);
+//         });
+// })
+
+
+router.post('/compile/:id', async (req, res) => {
+    const id = req.params.id;
+
+    let { code, language, submit, email } = req.body;
+
+    const problem = await Problem.findOne({ problem_id: id });
+
+    if (!problem) {
+        return res.status(404).send('Problem not found');
     }
 
-    let data = ({
-        "code": code,
-        "language": language,
-        "input": input
-    });
-    let config = {
-        method: 'post',
-        url: 'https://api.codex.jaagrav.in',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        data: data
-    };
-    //calling the code compilation API
-    Axios(config)
-        .then((response) => {
-            res.send(response.data)
-            console.log(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
+    const example = problem.examples;
 
-    })
+    let range;
+
+    if (submit == true) {
+        range = example.length
+    } else {
+        range = 3
+    }
+
+    console.log("range - " + range);
+
+    let user;
+    if (submit) user = await User.findOne({ email: email });
+
+    for (let i = 0; i < range; i++) {
+        const response = await compileCode(language, code, example[i]);
+
+        if (response) {
+            console.log(response.message);
+            console.log(example[i].output);
+            if (response.status == 201) {
+                response.message = response.message.replace("\n", "");
+                if (response.message.toLowerCase() !== example[i].output.toLowerCase()) {
+                    if (submit) {
+                        user.history.push({ problemID: problem.problem_id, problem_title: problem.problem_title, status: false, language: language, code: code })
+                        await user.save();
+                    }
+                    return res.json({ status: 405, error: example[i], message: `wrong output on test case ${i + 1}` });
+                }
+            }
+            else {
+                if (submit) {
+                    user.history.push({ problemID: problem.problem_id, problem_title: problem.problem_title, status: false, language: language, code: code });
+                    await user.save();
+                }
+                if (response.status == 401) {
+                    return res.json({ status: 401, error: response.message, message: "" });
+                } else if (response.status == 402) {
+                    return res.json({ status: 402, error: response.message, message: "" });
+                } else if (response.status == 403) {
+                    return res.json({ status: 403, error: "Error While Fetching Data", message: "" });
+                }
+            }
+        }
+
+        console.log("sleep start");
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        console.log("sleep end");
+    }
+
+    if (submit) {
+        console.log(problem.problem_title);
+
+        user.solvedQuestion.push(problem._id);
+        user.history.push({ problemID: problem.problem_id, problem_title: problem.problem_title, status: true, language: language, code: code });
+        await user.save();
+    }
+
+    console.log("Run or complied successfully");
+
+    return res.json({ status: 200, error: "", message: "Code Compiled successfully in all testcases." });
+})
+
+
+const compileCode = async (language, code, example) => {
+    let url = "https://emkc.org/api/v2/piston/execute"
+    let data = {};
+
+    if (language == "c" || language == "cpp") {
+        url = "https://api.codex.jaagrav.in";
+
+        data = {
+            language: language,
+            code: code,
+            input: example.input
+        };
+    } else {
+        data = {
+            language: language,
+            version: language_version[language],
+            files: [
+                {
+                    content: code,
+                }
+            ],
+            stdin: example.input
+        }
+    }
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    }).then(res => res.json());
+
+    console.log(response);
+    if (language == 'c' || language == 'cpp') {
+        if (response.output !== "") {
+            return { status: 201, message: response.output }
+        } else if (response.error !== "") {
+            return { status: 402, message: response.error }
+        }
+        else {
+            return { status: 403, message: "Error While Fetching Data" } // server fetching error
+        }
+    }
+    else {
+        if (response.message) {
+            return { status: 401, message: response.message } // version err
+        } else if (response.run) {
+            if (response.run.stderr != "") {
+                console.log(response);
+                return { status: 402, message: response.run.stderr } // compilation err
+            } else if (response.run.output != "") {
+                return { status: 201, message: response.run.output } // success
+            }
+            else {
+                return { status: 201, message: response.run.output }
+            }
+        } else {
+            return { status: 403, message: "Error While Fetching Data" } // server fetching error
+        }
+    }
+}
+
 module.exports = router;
