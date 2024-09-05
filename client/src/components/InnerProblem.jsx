@@ -78,7 +78,14 @@ export const InnerProblem = () =>{
         const data = await res.json();
 
         if(data.error){
-            setUserOutput(data.error)
+            console.log(data.error);
+
+            if (data.status==405){
+                setUserOutput(data.error.input + " "+data.error.output)
+            }
+            else{
+                setUserOutput(data.error)
+            }
         }
         else{
             setUserOutput(data.message)
