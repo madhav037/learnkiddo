@@ -227,6 +227,9 @@ router.post('/compile/:id', async (req, res) => {
 
     let { code, language, submit, email } = req.body;
 
+    console.log(code);
+
+
     const problem = await Problem.findOne({ problem_id: id });
 
     if (!problem) {
@@ -252,11 +255,13 @@ router.post('/compile/:id', async (req, res) => {
         const response = await compileCode(language, code, example[i]);
 
         if (response) {
-            // console.log(response.message);
-            // console.log(example[i].output);
+            console.log(response.status);
+            
             if (response.status == 201) {
                 response.message = response.message.replace("\n", "");
-                if (response.message.toLowerCase() !== example[i].output.toLowerCase()) {
+                console.log(response.message);
+
+                if (response.message !== example[i].output) {
                     if (submit) {
                         user.history.push({ problemID: problem.problem_id, problem_title: problem.problem_title, status: false, language: language, code: code })
                         await user.save();
@@ -302,6 +307,10 @@ const compileCode = async (language, code, example) => {
     let url = "https://emkc.org/api/v2/piston/execute"
     let data = {};
 
+    if (example.input.includes(' ')) {
+        example.input = example.input.split(' ').join('\n');
+    }
+
     if (language == "c" || language == "cpp") {
         url = "https://api.codex.jaagrav.in";
 
@@ -322,6 +331,8 @@ const compileCode = async (language, code, example) => {
             stdin: example.input
         }
     }
+
+
 
     const response = await fetch(url, {
         method: "POST",
