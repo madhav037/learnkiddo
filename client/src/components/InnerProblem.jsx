@@ -24,7 +24,7 @@ export const InnerProblem = () =>{
     const [userTheme, setUserTheme] = useState("vs-dark");
 
     // State variable to set editors default font size
-    const [fontSize, setFontSize] = useState(20);
+    const [fontSize, setFontSize] = useState(18);
 
     // State variable to set users output
     const [userOutput, setUserOutput] = useState("");
@@ -157,29 +157,26 @@ export const InnerProblem = () =>{
                             <div className='flex flex-col'>
                             <button onClick={()=>{
                                     compile(false)
-                            }} className="run-btn absolute bottom-2.5 right-13 w-20 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
+                            }} className="run-btn absolute bottom-2.5 right-13 w-20 h-10 text-2xl font-bold text-black border-none rounded transition duration-300 cursor-pointer ms-2" style={{backgroundColor: '#B7C0EE'}}>
                                 Run
                             </button>
                             <button onClick={()=>{
                                     compile(true)
-                            }} className="run-btn absolute bottom-2.5 right-4 w-24 h-10 text-2xl font-bold bg-lime-400 border-none rounded transition duration-300 cursor-pointer active:bg-lime-600">
+                            }} className="run-btn absolute bottom-2.5 right-4 w-24 h-10 text-2xl font-bold  border-none rounded transition duration-300 cursor-pointer me-2" style={{backgroundColor: '#B7C0EE'}}>
                                 submit
                             </button>
                             </div>
                         </div>
                         <div className="right-container flex-[40%] h-[calc(100vh-50px)] flex flex-col bg-gray-900 border-l-3 border-blue-600 p-1.5">
-                            <h4 className="text-lime-300">Input: {problem.problem_title}</h4>
+                            <h4 className=" text-white">Input: {problem.problem_title}</h4>
                             <div className="input-box flex-[50%]">
                                 <textarea id="code-inp" className="w-full h-full text-white resize-none bg-gray-900 text-whitesmoke p-1.5 focus:outline-none" ></textarea>
                             </div>
-                            <h4 className="text-lime-300 text-white">Output:</h4>
+                            <h4 className=" text-white">Output:</h4>
                             {loading ? (
                                 <h1 className='text-white'>
                                     Loading
                                 </h1>
-                                // <div className="spinner-box flex-[50%] bg-gray-900 flex justify-center items-center overflow-y-auto">
-                                //     <img src={spinner} alt="Loading..." className="w-52" />
-                                // </div>
                             ) : (
                                 <div className="output-box flex-[50%] bg-gray-900 overflow-y-auto text-white relative">
                                     <pre className="text-base whitespace-pre-wrap">{userOutput}</pre>

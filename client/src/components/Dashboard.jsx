@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import bento from '../images/bentobg.png'
 import bentobook from '../images/bentobooks.png'
@@ -9,7 +9,23 @@ import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
 
+  const [user, setUser] = useState({ solvedQuestion: [] });
+
   const name = localStorage.getItem('email');
+
+  useEffect(() => {
+    try
+    {
+      fetch("http://localhost:8000/user/" + name , {method: 'GET'}).then((res) => {return res.json()}).then((res) => setUser(res))
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
+  },[name])
+
+  const solvedQuestions = Array.isArray(user.solvedQuestion) ? user.solvedQuestion.length : 0;
+
   const backgroundStyle = {
     background: `url(${bento}) no-repeat center center / cover fixed`
   };
@@ -59,7 +75,9 @@ const Dashboard = () => {
                 <div className='flex justify-center text-xl font-bold text-red-500 italic'>
                   {name}
                 </div>
-                <button className='w-24 rounded-2xl mt-2 text-xl text-blue-950 font-bold italic' style={{ backgroundColor: '#b7c0ee' }}>About</button>
+                <div className='bg-orange-500 py-1 px-4 rounded-xl font-bold text-black mt-2'>
+                  Solved Problems : {solvedQuestions}
+                </div>
               </div>
             </div>
             <div className='w-1/4 h-2/3  float-end p-2'>

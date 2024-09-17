@@ -11,11 +11,11 @@ export const VideoDashboard = () => {
 
     const data = videData.map(item => {
         return <>
-            <div className=' text-black flex flex-col justify-center items-center rounded-xl p-3' style={{ backgroundColor: "#435688" }}>
-                <div className='rounded-md p-2' style={{ backgroundColor:"#8899C5"}}>
-                    <img src={`${item.logo}`} alt="" className='h-48 w-48' />
+            <div className=' text-black flex flex-col justify-center items-center rounded-xl p-3 bg-white'>
+                <div className='rounded-md p-2'>
+                    <img src={`${item.logo}`} alt="" className='h-40 w-40' />
                 </div>
-                <div className='text-2xl font-bold mt-3 mb-4 text-white'>
+                <div className='text-2xl font-bold mt-3 mb-4 text-black'>
                     {item.title}
                 </div>
                 <div>

@@ -57,4 +57,9 @@ router.get('/', async (req, res) => {
     return res.json(user);
 })
 
+router.get('/:id', async (req, res) => {
+    let user = await User.find({email : req.params.id});
+    return res.json(user[0]);
+})
+
 module.exports = router;

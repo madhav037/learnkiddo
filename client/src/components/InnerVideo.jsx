@@ -14,9 +14,9 @@ export const InnerVideo = () => {
     return (
         <div className='flex flex-col h-screen' style={{ backgroundColor: '#B7C0EE' }}>
             <Header />
-            <div className='flex flex-col justify-center items-center m-10 '>
+            <div className='flex flex-col justify-center items-center m-10 ' >
                 <div className='w-11/12 h-auto flex flex-col gap-10'>
-                    <div className='text-base font-semibold text-justify bg-blue-400 p-8 rounded-2xl' style={{ backgroundColor:"#758ABF"}}>
+                    <div className='text-base font-semibold text-justify text-white p-8 rounded-2xl' style={{ backgroundColor: '#0B1D51' }}>
                         {videData.description}
                     </div>
                     <div className='flex flex-row gap-10'>

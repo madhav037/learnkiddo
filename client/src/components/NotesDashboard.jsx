@@ -15,11 +15,11 @@ export const NotesDashboard = () => {
 
     const data = notesData.map(items => {
         return <>
-            <div className=' text-black flex flex-col justify-center items-center rounded-xl p-3' style={{ backgroundColor: "#435688" }}>
-                <div className='rounded-md p-3' style={{ backgroundColor: "#8899C5" }}>
-                    <img src={`${items.logo}`} alt="" className='h-48 w-48'/>
+            <div className=' text-black bg-white flex flex-col justify-center items-center rounded-xl p-3' >
+                <div className='rounded-md p-3' >
+                    <img src={`${items.logo}`} alt="" className='h-40 w-40'/>
                 </div>
-                <div className='text-xs font-bold mt-3 mb-2 text-white'>
+                <div className='text-2xl text-center w-40 font-bold mt-3 mb-4 text-black'>
                     {items.title}
                 </div>
                 <div>
@@ -31,7 +31,7 @@ export const NotesDashboard = () => {
 
   return (
     <>
-    <div className='overflow-x-hidden flex flex-col' style={{backgroundColor: '#B7C0EE'}}>
+    <div className='overflow-y-hidden flex flex-col' style={{backgroundColor: '#B7C0EE'}}>
         <Header />
         <div className='flex justify-center items-center m-5'>
             <div className='grid grid-cols-4 gap-5 rounded-xl'>

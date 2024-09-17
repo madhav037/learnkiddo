@@ -292,8 +292,22 @@ router.post('/compile/:id', async (req, res) => {
     if (submit) {
         console.log(problem.problem_title);
 
-        user.solvedQuestion.push(problem._id);
-        user.history.push({ problemID: problem.problem_id, problem_title: problem.problem_title, status: true, language: language, code: code });
+        if(!user.solvedQuestion.includes(problem._id))
+        {
+            user.solvedQuestion.push(problem._id);
+            user.history.push({ problemID: problem.problem_id, problem_title: problem.problem_title, status: true, language: language, code: code });
+        }
+        else
+        {
+            const historyIndex = user.history.findIndex(entry => entry.problemID === problem.problem_id);
+    
+            if (historyIndex !== -1) {
+                user.history[historyIndex].status = true;
+                user.history[historyIndex].code = code;
+                user.history[historyIndex].language = language;
+            }
+        }
+        
         await user.save();
     }
 

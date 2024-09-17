@@ -25,12 +25,10 @@ export const ProblemDashboard = () => {
   const getUser = async () => {
     const name = localStorage.getItem('email');
     try {
-      const isSolved = await fetch("http://localhost:8000/user")
+      const isSolved = await fetch("http://localhost:8000/user/" + name)
       const res = await isSolved.json();
 
-      let user_found = res.find(users => users.email === name);
-
-      setUser(user_found);
+      setUser(res);
 
     } catch (error) {
       console.log(error);
@@ -41,6 +39,8 @@ export const ProblemDashboard = () => {
     getProblems();
     getUser();
   }, [user])
+
+  const totalSolvedQuestion = Array.isArray(user.solvedQuestion) ? user.solvedQuestion.length : 0;
 
   console.log(user);
 
@@ -78,8 +78,20 @@ export const ProblemDashboard = () => {
   return (
     <div className='w-screen h-fit overflow-hidden flex flex-col gap-10' style={{backgroundColor: '#B7C0EE'}}>
       <Header />
-      <div className="text-3xl font-bold text-center font-serif">
-          Program List
+      <div className='flex justify-between items-center mx-10 '>
+        <div className="text-3xl font-bold text-center font-serif">
+            Program List
+        </div>
+        <div className='flex flex-col justify-center items-center font-bold border-2 border-black rounded-full w-20 h-20 shadow-xl'>
+          <div className='text-2xl'>
+            {totalSolvedQuestion}
+          </div>
+          <div className='border-t-2 w-1/2 border-black'>
+          </div>
+          <div>
+            {probelmStatement.length}
+          </div>
+        </div>
       </div>
       <div className='w-screen p-2'>
         {probelmStatement}
