@@ -41,6 +41,9 @@ app.use('/problem', problem);
 //     console.log('Helloooooo');
 // })
 
+__dirname = path.resolve();
+console.log(__dirname)
+
 app.listen(process.env.PORT, () => {
     console.log('PORT running');
 })
