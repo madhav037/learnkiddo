@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const compiler = require('compilex');
 const options = { stats: true };
+const __dirname = path.resolve()
 
 dotenv.config({ path: './.env' });
 const app = express();
@@ -42,4 +43,10 @@ app.get('/', async (req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log('PORT running');
+})
+
+app.use(express.static(path.join(__dirname, '/client/dist')))
+
+app.get('*', (req,res) => {
+  res.sendFile(path.join(__dirname,'client', 'dist', 'index.html'))
 })
