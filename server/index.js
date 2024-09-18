@@ -10,6 +10,7 @@ const options = { stats: true };
 dotenv.config({ path: './.env' });
 const app = express();
 
+__dirname = path.resolve();
 app.use(cors());
 app.use(express.json());
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -41,7 +42,6 @@ app.use('/problem', problem);
 //     console.log('Helloooooo');
 // })
 
-__dirname = path.resolve();
 console.log(__dirname)
 
 app.listen(process.env.PORT, () => {
