@@ -37,9 +37,9 @@ app.use('/editor', editor);
 const problem = require("./routes/problemRouter.js")
 app.use('/problem', problem);
 
-app.get('/', async (req, res) => {
-    console.log('Helloooooo');
-})
+// app.get('/', async (req, res) => {
+//     console.log('Helloooooo');
+// })
 
 app.listen(process.env.PORT, () => {
     console.log('PORT running');
