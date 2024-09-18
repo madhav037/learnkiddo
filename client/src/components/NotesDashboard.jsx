@@ -10,7 +10,7 @@ export const NotesDashboard = () => {
     const nav = useNavigate();
 
     useEffect(()=> {
-        fetch("http://localhost:8000/notes", {method : 'GET'}).then((res) => {return res.json()}).then(res => {setNotesData(res)})
+        fetch("/notes", {method : 'GET'}).then((res) => {return res.json()}).then(res => {setNotesData(res)})
     }, [])
 
     const data = notesData.map(items => {

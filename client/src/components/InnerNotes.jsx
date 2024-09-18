@@ -8,7 +8,7 @@ export const InnerNotes = () => {
     const param = useParams();
 
     useEffect(()=> {
-        fetch("http://localhost:8000/notes/" + param.id , {method : 'GET'}).then((res) => {return res.json()}).then(res => {setNotes(res)});
+        fetch("/notes/" + param.id , {method : 'GET'}).then((res) => {return res.json()}).then(res => {setNotes(res)});
     }, [])
   return (
     <div className='h-screen w-full overflow-x-hidden'>

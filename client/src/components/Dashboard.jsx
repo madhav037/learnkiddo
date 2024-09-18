@@ -16,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     try
     {
-      fetch("http://localhost:8000/user/" + name , {method: 'GET'}).then((res) => {return res.json()}).then((res) => setUser(res))
+      fetch("/user/" + name , {method: 'GET'}).then((res) => {return res.json()}).then((res) => setUser(res))
     }
     catch(error)
     {

@@ -8,7 +8,7 @@ export const InnerVideo = () => {
     const params = useParams();
 
     useEffect(() => {
-        fetch('http://localhost:8000/video/' + params.id, { method: 'GET' }).then((res) => { return res.json() }).then((res) => { setVideoData(res) })
+        fetch('/video/' + params.id, { method: 'GET' }).then((res) => { return res.json() }).then((res) => { setVideoData(res) })
     }, [])
 
     return (

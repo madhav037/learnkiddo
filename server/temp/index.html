@@ -85,7 +85,7 @@
             lang: option.value
         }
         console.log(code)
-        var oData = await fetch("http://localhost:8000/compile", {
+        var oData = await fetch("/compile", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

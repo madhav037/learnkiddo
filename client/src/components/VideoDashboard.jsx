@@ -6,7 +6,7 @@ export const VideoDashboard = () => {
     const [videData, setVideoData] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8000/video', { method: 'GET' }).then((res) => { return res.json() }).then((res) => { setVideoData(res) })
+        fetch('/video', { method: 'GET' }).then((res) => { return res.json() }).then((res) => { setVideoData(res) })
     }, [])
 
     const data = videData.map(item => {

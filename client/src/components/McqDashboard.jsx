@@ -8,7 +8,7 @@ export const McqDashboard = () => {
     const param = useParams;
 
     useEffect(() => {
-        fetch('http://localhost:8000/mcq', { method: 'GET' }).then(res => { return res.json() }).then(res => setMcqData(res))
+        fetch('/mcq', { method: 'GET' }).then(res => { return res.json() }).then(res => setMcqData(res))
     }, [])
 
     const data = mcqData.map(item => {

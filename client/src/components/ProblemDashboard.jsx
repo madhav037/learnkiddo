@@ -13,7 +13,7 @@ export const ProblemDashboard = () => {
   const getProblems = async () => {
     
     try {
-      const data = await fetch('http://localhost:8000/problem/getallproblem')
+      const data = await fetch('/problem/getallproblem')
       const res = await data.json();
       setProblems(res);
 
@@ -25,7 +25,7 @@ export const ProblemDashboard = () => {
   const getUser = async () => {
     const name = localStorage.getItem('email');
     try {
-      const isSolved = await fetch("http://localhost:8000/user/" + name)
+      const isSolved = await fetch("/user/" + name)
       const res = await isSolved.json();
 
       setUser(res);

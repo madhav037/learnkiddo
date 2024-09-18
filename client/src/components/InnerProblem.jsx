@@ -45,7 +45,7 @@ export const InnerProblem = () =>{
     const getProblem = async()=>{
         try{
             console.log(param.id);
-            const response = await fetch(`http://localhost:8000/problem/getoneproblem/${param.id}`, { method: 'GET' });
+            const response = await fetch(`/problem/getoneproblem/${param.id}`, { method: 'GET' });
             const res = await response.json();
             setProblem(res);
         } catch(error){
@@ -67,7 +67,7 @@ export const InnerProblem = () =>{
         console.log(submit);
         console.log(email);
 
-        const res = await fetch(`http://localhost:8000/editor/compile/${param.id}`,{
+        const res = await fetch(`/editor/compile/${param.id}`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

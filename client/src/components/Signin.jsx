@@ -50,7 +50,7 @@ const Signin = () => {
                                             <button onClick={async (e) => {
                                                 console.log(userData);
                                                 e.preventDefault();
-                                                const res = await fetch('http://localhost:8000/user/login', {
+                                                const res = await fetch('/user/login', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json'
