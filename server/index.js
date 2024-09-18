@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const compiler = require('compilex');
 const options = { stats: true };
-const __dirname = path.resolve()
+// const __dirname = path.resolve()
 
 dotenv.config({ path: './.env' });
 const app = express();
