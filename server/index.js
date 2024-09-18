@@ -21,6 +21,11 @@ require('./connection/db.js');
 app.use(express.static(path.join(__dirname, 'client/build')))
 
 const user = require('./routes/userRouter.js');
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use('/user', user);
 
 const video = require('./routes/videoRouter.js');
